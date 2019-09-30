@@ -1,0 +1,11 @@
+---
+title: "p8105_hw2_Ec3342"
+author: "Ekta Chaudhary"
+date: "30/09/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
