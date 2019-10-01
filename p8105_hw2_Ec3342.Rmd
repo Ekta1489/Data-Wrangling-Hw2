@@ -22,9 +22,8 @@ trashwheel_data =
     sheet = "Mr. Trash Wheel"
   ) %>%
   janitor::clean_names() %>%
-  na.omit() %>%
   drop_na(., dumpster) %>%
-  mutate(sports_ball_int = as.integer(sports_balls))
+  mutate(sports_balls = as.integer(sports_balls))
 ```
 
 ## Reading and cleaning the precipitation data for 2017 and 2018.
@@ -36,7 +35,11 @@ precipitation_data_2017 =
     sheet = "2017 Precipitation"
   ) %>%
   janitor::clean_names() %>%
-  na.omit() 
+  drop_na() %>%
+mutate(
+  year = 2017,
+  )
+
 ```
 
 
@@ -47,5 +50,10 @@ precipitation_data_2018 =
     sheet = "2018 Precipitation"
   ) %>%
   janitor::clean_names() %>%
-  na.omit() 
+  drop_na() %>%
+  mutate(
+    year = 2018
+    )
 ```
+
+
