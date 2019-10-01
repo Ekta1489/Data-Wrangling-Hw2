@@ -12,10 +12,10 @@ library(tidyverse)
 library(readxl)
 ```
 
-#Question 1
+# Question 1
 
 ## Reading and cleaning the Mr. Trash Wheel sheet. 
-## Mentioned the path to the xlsx file using path = "./data/Trash_wheet_data.xlsx", specified the sheet to read by providing the name of the sheet which is Mr. Trash Wheel here. Cleaned the variable names so that they are reasonable, omitted the rows that do not include dumpster-specific data, rounded the number of sports balls to the nearest integer.
+#Mentioned the path to the xlsx file using path = "./data/Trash_wheet_data.xlsx", specified the sheet to read by providing the name of the sheet which is Mr. Trash Wheel here. Cleaned the variable names so that they are reasonable, omitted the rows that do not include dumpster-specific data, rounded the number of sports balls to the nearest integer.
 
 ```{r trashwheel_data}
 trashwheel_data = 
@@ -30,7 +30,8 @@ trashwheel_data =
     )
 ```
 
-## Reading and cleaning the precipitation data for 2017 and 2018. Omitted the rows without precipitation data and added a variable year which is = 2017 for precipitaion_data_2017 and 2018 for precipitation_data_2018.Combined both the precipitation data (precipitation_data_2017 and precipitation_data_2018) to form combined_data. In the combined_data used month.name to convert the month from numeric to character variable.
+## Reading and cleaning the precipitation data for 2017 and 2018. 
+#Omitted the rows without precipitation data and added a variable year which is = 2017 for precipitaion_data_2017 and 2018 for precipitation_data_2018.Combined both the precipitation data (precipitation_data_2017 and precipitation_data_2018) to form combined_data. In the combined_data used month.name to convert the month from numeric to character variable.
 
 ```{r precipitation_data}
 precipitation_data_2017 =
