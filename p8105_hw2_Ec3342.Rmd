@@ -7,5 +7,20 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(readxl)
+```
+
+#Question 1
+
+## Reading and cleaning the Mr. Trash Wheel sheet.
+```{r}
+trashwheel_data = 
+  read_excel(
+    path = "./data/trashwheel_data.xlsx", 
+    sheet = "Mr. Trash Wheel"
+  )
+
 ```
 
