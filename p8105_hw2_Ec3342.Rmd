@@ -66,8 +66,9 @@ combined_data = union_all(
     )
 ```
 ## Describing both the datasets!
-The number of observations in trashwheel_data is `r nrow(trashwheel_data)` 
-The number of observations in precipitation_data_2017 is `r nrow(precipitation_data_2017)` 
-The number of observations in precipitation_data_2018 is `r nrow(precipitation_data_2018)`
+The number of observations in trashwheel_data is `r nrow(trashwheel_data)`,
+The number of observations in precipitation_data_2017 is `r nrow(precipitation_data_2017)`,
+The number of observations in precipitation_data_2018 is `r nrow(precipitation_data_2018)`, 
+The number of observations in combined_data is `r nrow(combined_data)`.
 
 
