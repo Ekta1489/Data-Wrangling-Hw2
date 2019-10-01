@@ -18,7 +18,7 @@ library(readxl)
 ```{r}
 trashwheel_data = 
   read_excel(
-    path = "./data/trashwheel_data.xlsx", 
+    path = "./data/Trash_wheet_data.xlsx", 
     sheet = "Mr. Trash Wheel"
   ) %>%
   janitor::clean_names() %>%
@@ -31,13 +31,13 @@ trashwheel_data =
 ```{r}
 precipitation_data_2017 =
   read_excel(
-    path = "./data/trashwheel_data.xlsx",
+    path = "./data/Trash_wheet_data.xlsx",
     sheet = "2017 Precipitation"
   ) %>%
   janitor::clean_names() %>%
   drop_na() %>%
 mutate(
-  year = 2017,
+  year = 2017
   )
 
 ```
@@ -46,7 +46,7 @@ mutate(
 ```{r}
 precipitation_data_2018 =
   read_excel(
-    path = "./data/trashwheel_data.xlsx",
+    path = "./data/Trash_wheet_data.xlsx",
     sheet = "2018 Precipitation"
   ) %>%
   janitor::clean_names() %>%
