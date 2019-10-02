@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(readxl)
+library(dplyr)
+
 ```
 
 # Question 1
@@ -66,9 +68,10 @@ combined_data = union_all(
     )
 ```
 ## Describing both the datasets!
-The number of observations in trashwheel_data is `r nrow(trashwheel_data)`,
-The number of observations in precipitation_data_2017 is `r nrow(precipitation_data_2017)`,
-The number of observations in precipitation_data_2018 is `r nrow(precipitation_data_2018)`, 
-The number of observations in combined_data is `r nrow(combined_data)`.
-
-
+*The number of observations in trashwheel_data is `r nrow(trashwheel_data)`
+*The number of observations in combined_data is `r nrow(combined_data)`
+(The number of observations in precipitation_data_2017 is `r nrow(precipitation_data_2017)`,
+The number of observations in precipitation_data_2018 is `r nrow(precipitation_data_2018)`) 
+*The key variables for combined_data are month, year, total.
+*The total precipitation in 2018 was `r sum(pull(precipitation_data_2018, total))`
+*The median number of sports ball in a dumpster in 2017 was `r trashwheel_data %>% select(sports_balls, year) %>% filter(year == 2017) %>% summarise(median = median(sports_balls))`
