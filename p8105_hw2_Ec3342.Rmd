@@ -213,7 +213,7 @@ pop_boy = filter(
 ```{r}
 
 filter(
-  pop_baby, gender == "MALE", ethnicity == "WHITE NON HISPANIC", year_of_birth == 2016
+  pop_baby, gender == "male", ethnicity == "white non hispanic", year_of_birth == 2016
   ) %>%
   ggplot(
     aes(x = rank, y = count)) + geom_point(alpha = 0.4)
