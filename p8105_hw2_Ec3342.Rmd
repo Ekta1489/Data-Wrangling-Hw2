@@ -98,10 +98,9 @@ pols_data =
   select(
     -day
   )
-  
 ```
 
-##Cleaned the data in snp.csv using a similar process to the above. For consistency across datasets, arranged according to year and month, and organized so that year and month are the leading columns.
+##Cleaning the data in snp.csv using a similar process to the above. For consistency across datasets, arranging according to year and month, and organizing so that year and month are the leading columns.
 
 ```{r snp_data}
 snp_data =
@@ -125,11 +124,11 @@ unemployment_data =
   read_csv(file = "./data/unemployment.csv") %>%
   janitor::clean_names() %>%
   pivot_longer(
-    jan:dec, names_to = "month", values_to = "value") %>%
+    jan:dec, names_to = "month", values_to = "rate") %>%
   mutate(
     year = as.character(year)) %>%
   select(
-    year = year, month, value
+    year, month, everything()
   )
 ```
 
@@ -144,5 +143,8 @@ final_merged_data =
   left_join(
     merged_data, unemployment_data, by = c("year","month"))
 ```
+
+# Question 3
+
 
 
