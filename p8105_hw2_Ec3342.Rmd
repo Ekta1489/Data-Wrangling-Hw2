@@ -123,7 +123,7 @@ unemployment_data =
     year = year, everything())
 ```
 
-## merged_data is formed by joining snp into pols using year and month as keys. final_merged_data is formed by joining the merged_data with unemployment_data using year and month as keys.
+##merged_data is formed by joining snp into pols using year and month as keys. final_merged_data is formed by joining the merged_data with unemployment_data using year and month as keys.
 
 ```{r merged_data}
 merged_data =
