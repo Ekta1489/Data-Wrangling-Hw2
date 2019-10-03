@@ -78,9 +78,9 @@ The number of observations in precipitation_data_2018 is `r nrow(precipitation_d
 
 # Question 2
 
-##First reading the datasets pols-month.csv, unemployment.csv, snp.csv. Then merging the pols-month.csv, unemployment.csv, and snp.csv into a single dataframe using year and month as keys across datasets.
+##First reading the datasets pols-month.csv and clean the data in pols-month.csv. Used separate() to break up the variable mon into integer variables year, month, and day; replaced month number with month name; created a president variable taking values gop and dem, and removed prez_dem and prez_gop; and removed the day variable.
 
-```{r}
+```{r pols_data}
 pols_data = 
   read_csv(file = "./data/pols-month.csv") %>%
   janitor::clean_names() %>%
@@ -90,7 +90,11 @@ pols_data =
     month = as.numeric(month),
     month = month.abb[month]
     )
-    
+```
+
+##Cleaned the data in snp.csv using a similar process to the above. For consistency across datasets, arranged according to year and month, and organized so that year and month are the leading columns.
+
+```{r snp_data}
 snp_data =
   read_csv(file = "./data/snp.csv") %>% 
 janitor::clean_names() %>% 
@@ -104,7 +108,10 @@ arrange(
     month = as.numeric(month),
     month = month.abb[month]
     )
+```
+##Tidying the unemployment data so that it can be merged with the previous datasets
 
+```{r unemployment_data}
 unemployment_data =
   read_csv(file = "./data/unemployment.csv") %>%
   janitor::clean_names() %>%
@@ -114,7 +121,11 @@ unemployment_data =
     year = as.character(year)) %>%
   select(
     year = year, everything())
+```
 
+## merged_data is formed by joining snp into pols using year and month as keys. final_merged_data is formed by joining the merged_data with unemployment_data using year and month as keys.
+
+```{r merged_data}
 merged_data =
   left_join(
     snp_data, pols_data, by = c("year","month"))
@@ -122,8 +133,6 @@ merged_data =
 final_merged_data =
   left_join(
     merged_data, unemployment_data, by = c("year","month"))
-
 ```
 
 
-```{r}
