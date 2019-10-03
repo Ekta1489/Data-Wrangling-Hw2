@@ -124,7 +124,7 @@ unemployment_data =
   read_csv(file = "./data/unemployment.csv") %>%
   janitor::clean_names() %>%
   pivot_longer(
-    jan:dec, names_to = "month", values_to = "rate") %>%
+    jan:dec, names_to = "month", values_to = "unemployment_rate") %>%
   mutate(
     year = as.character(year)) %>%
   select(
@@ -151,14 +151,14 @@ pop_baby =
   read_csv(file = "./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
   mutate(
-    gender = str_to_upper(gender), ethnicity = str_to_upper(ethnicity),
-    childs_first_name = str_to_upper(childs_first_name)) %>%
+    gender = str_to_lower(gender), ethnicity = str_to_lower(ethnicity),
+    childs_first_name = str_to_lower(childs_first_name)) %>%
   distinct()
 ```
 
 ```{r}
 olivia = filter(
-  pop_baby, gender == "FEMALE", childs_first_name == "OLIVIA") %>%
+  pop_baby, gender == "female", childs_first_name == "olivia") %>%
   pivot_wider(
     names_from = year_of_birth, values_from = rank) %>%
   select(
@@ -167,11 +167,11 @@ olivia = filter(
 ```
 ```{r}
 pop_boy = filter(
-  pop_baby, gender == "MALE", rank == 1) %>%
+  pop_baby, gender == "male", rank == 1) %>%
   pivot_wider(
     names_from = year_of_birth, values_from = rank) %>%
   select(
-    -gender, -ethnicity, -count
+    -gender,-count
   )
 ```
 ```{r}
