@@ -82,15 +82,19 @@ The number of observations in precipitation_data_2018 is `r nrow(precipitation_d
 
 ```{r pols_data}
 pols_data = 
-  read_csv(file = "./data/pols-month.csv") %>%
+  read_csv(
+    file = "./data/pols-month.csv"
+    ) %>%
   janitor::clean_names() %>%
   separate(
-    col = mon, into = c("year", "month", "day")) %>% 
+    col = mon, into = c("year", "month", "day")
+    ) %>% 
   select(
     prez_gop, prez_dem, everything()
   ) %>%
   pivot_longer(
-    prez_gop:prez_dem, names_to = "president", names_prefix = "prez_") %>%
+    prez_gop:prez_dem, names_to = "president", names_prefix = "prez_"
+    ) %>%
   mutate(
    month = as.numeric(month),
    month = month.abb[month]
@@ -103,13 +107,18 @@ pols_data =
 ##Cleaning the data in snp.csv using a similar process to the above. For consistency across datasets, arranging according to year and month, and organizing so that year and month are the leading columns.
 
 ```{r snp_data}
+
 snp_data =
-  read_csv(file = "./data/snp.csv") %>% 
+  read_csv(
+    file = "./data/snp.csv"
+    ) %>% 
   janitor::clean_names() %>% 
   separate(
-  col = date, into = c("month", "day", "year")) %>% 
+  col = date, into = c("month", "day", "year")
+  ) %>% 
   arrange(
-  as.integer(year), as.integer(month)) %>%
+  as.integer(year), as.integer(month)
+  ) %>%
   select(
      year, month, close) %>%
   mutate(
@@ -120,13 +129,17 @@ snp_data =
 ##Tidying the unemployment data so that it can be merged with the previous datasets
 
 ```{r unemployment_data}
+
 unemployment_data =
-  read_csv(file = "./data/unemployment.csv") %>%
+  read_csv(
+    file = "./data/unemployment.csv"
+    ) %>%
   janitor::clean_names() %>%
   pivot_longer(
     jan:dec, names_to = "month", values_to = "unemployment_rate") %>%
   mutate(
-    year = as.character(year)) %>%
+    year = as.character(year)
+    ) %>%
   select(
     year, month, everything()
   )
@@ -135,48 +148,75 @@ unemployment_data =
 ##merged_data is formed by joining snp into pols using year and month as keys. final_merged_data is formed by joining the merged_data with unemployment_data using year and month as keys.
 
 ```{r merged_data}
+
 merged_data =
   left_join(
-    snp_data, pols_data, by = c("year","month"))
+    snp_data, pols_data, by = c("year","month")
+    )
 
 final_merged_data =
   left_join(
-    merged_data, unemployment_data, by = c("year","month"))
+    merged_data, unemployment_data, by = c("year","month")
+    )
 ```
 
 # Question 3
 
-```{r}
+##Loading and tidying the data Popular_Baby_Names and creating a dataset called pop_baby. Changing the case structure of gender, ethnicity and childs first name to lower case to maintain uniformity throughout. Removing all the duplicate rows.
+
+```{r popular baby}
+
 pop_baby = 
-  read_csv(file = "./data/Popular_Baby_Names.csv") %>%
+  read_csv(
+    file = "./data/Popular_Baby_Names.csv"
+    ) %>%
   janitor::clean_names() %>%
   mutate(
     gender = str_to_lower(gender), ethnicity = str_to_lower(ethnicity),
-    childs_first_name = str_to_lower(childs_first_name)) %>%
+    childs_first_name = str_to_lower(childs_first_name)
+    ) %>%
   distinct()
 ```
+##Producing a well-structured, reader-friendly table showing the rank in popularity of the name “Olivia” as a female baby name over time; showing the rows for ethnicities and columns for year. 
 
-```{r}
+```{r olivia}
+
 olivia = filter(
-  pop_baby, gender == "female", childs_first_name == "olivia") %>%
+  pop_baby, gender == "female", childs_first_name == "olivia"
+  ) %>%
   pivot_wider(
-    names_from = year_of_birth, values_from = rank) %>%
+    names_from = year_of_birth, values_from = rank
+    ) %>%
   select(
     -gender, -childs_first_name, -count
   )
 ```
-```{r}
+##Producing a similar table called pop_boy showing the most popular name among male children over time for male
+
+```{r pop_boy}
+
 pop_boy = filter(
-  pop_baby, gender == "male", rank == 1) %>%
+  pop_baby, gender == "male", rank == 1
+  ) %>%
   pivot_wider(
-    names_from = year_of_birth, values_from = rank) %>%
+    names_from = year_of_birth, values_from = rank
+    ) %>%
   select(
     -gender,-count
+  ) %>%
+  select(
+    childs_first_name, everything()
   )
 ```
+##Producing a scatter plot showing the number of children with a name (y axis) against the rank in popularity of that name (x axis) for male, white non-hispanic children born in 2016.
+
 ```{r}
-filter(pop_baby, gender == "MALE", ethnicity == "WHITE NON HISPANIC", year_of_birth == 2016) %>%
-  ggplot(aes(x = rank, y = count)) + geom_point(alpha = 0.4)
+
+filter(
+  pop_baby, gender == "MALE", ethnicity == "WHITE NON HISPANIC", year_of_birth == 2016
+  ) %>%
+  ggplot(
+    aes(x = rank, y = count)) + geom_point(alpha = 0.4)
 ```
 
 
