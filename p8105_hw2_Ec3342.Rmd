@@ -146,5 +146,38 @@ final_merged_data =
 
 # Question 3
 
+```{r}
+pop_baby = 
+  read_csv(file = "./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    gender = str_to_upper(gender), ethnicity = str_to_upper(ethnicity),
+    childs_first_name = str_to_upper(childs_first_name)) %>%
+  distinct()
+```
+
+```{r}
+olivia = filter(
+  pop_baby, gender == "FEMALE", childs_first_name == "OLIVIA") %>%
+  pivot_wider(
+    names_from = year_of_birth, values_from = rank) %>%
+  select(
+    -gender, -childs_first_name, -count
+  )
+```
+```{r}
+pop_boy = filter(
+  pop_baby, gender == "MALE", rank == 1) %>%
+  pivot_wider(
+    names_from = year_of_birth, values_from = rank) %>%
+  select(
+    -gender, -ethnicity, -count
+  )
+```
+```{r}
+filter(pop_baby, gender == "MALE", ethnicity == "WHITE NON HISPANIC", year_of_birth == 2016) %>%
+  ggplot(aes(x = rank, y = count)) + geom_point(alpha = 0.4)
+```
+
 
 
