@@ -72,13 +72,13 @@ combined_data = union_all(
 *The number of observations in combined_data is `r nrow(combined_data)`
 (The number of observations in precipitation_data_2017 is `r nrow(precipitation_data_2017)`,
 The number of observations in precipitation_data_2018 is `r nrow(precipitation_data_2018)`) 
-*The key variables for combined_data are month, year, total. The key variables for the trashwheel_data are dumpster, month, year, weight_tons, volume_cubic_yards
+*The key variables would be month, year, total. 
 *The total precipitation in 2018 was `r sum(pull(precipitation_data_2018, total))`
 *The median number of sports ball in a dumpster in 2017 was `r trashwheel_data %>% select(sports_balls, year) %>% filter(year == 2017) %>% summarise(median = median(sports_balls))`
 
 # Question 2
 
-##First reading the datasets pols-month.csv and clean the data in pols-month.csv. Used separate() to break up the variable mon into integer variables year, month, and day; replaced month number with month name; created a president variable taking values gop and dem, and removed prez_dem and prez_gop; and removed the day variable.
+##First reading the datasets pols-month.csv and cleaning the data in pols-month.csv. Used separate() to break up the variable mon into integer variables year, month, and day; replaced month number with month name; created a president variable taking values gop and dem, and removed prez_dem and prez_gop; and removed the day variable.
 
 ```{r pols_data}
 pols_data = 
@@ -87,9 +87,13 @@ pols_data =
   separate(
     col = mon, into = c("year", "month", "day")) %>% 
   mutate(
-    month = as.numeric(month),
-    month = month.abb[month]
-    )
+   month = as.numeric(month),
+   month = month.abb[month]
+  ) %>%
+  select(
+    -day
+  )
+  
 ```
 
 ##Cleaned the data in snp.csv using a similar process to the above. For consistency across datasets, arranged according to year and month, and organized so that year and month are the leading columns.
@@ -97,17 +101,17 @@ pols_data =
 ```{r snp_data}
 snp_data =
   read_csv(file = "./data/snp.csv") %>% 
-janitor::clean_names() %>% 
-separate(
+  janitor::clean_names() %>% 
+  separate(
   col = date, into = c("month", "day", "year")) %>% 
-arrange(
+  arrange(
   as.integer(year), as.integer(month)) %>%
   select(
-    year, month, everything()) %>%
+     year, month, close) %>%
   mutate(
     month = as.numeric(month),
     month = month.abb[month]
-    )
+    ) 
 ```
 ##Tidying the unemployment data so that it can be merged with the previous datasets
 
@@ -120,7 +124,8 @@ unemployment_data =
   mutate(
     year = as.character(year)) %>%
   select(
-    year = year, everything())
+    year = year, month, value
+  )
 ```
 
 ##merged_data is formed by joining snp into pols using year and month as keys. final_merged_data is formed by joining the merged_data with unemployment_data using year and month as keys.
