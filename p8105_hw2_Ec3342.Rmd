@@ -53,13 +53,13 @@ combined_data = union_all(precipitation_data_2017, precipitation_data_2018) %>%
 *The number of observations in combined_data is `r nrow(combined_data)`
 (The number of observations in precipitation_data_2017 is `r nrow(precipitation_data_2017)`,
 The number of observations in precipitation_data_2018 is `r nrow(precipitation_data_2018)`) 
-*The key variables in the combined_data would be month, year, total. The key variables in the trashwheel_data would be dumpster, month, year.
+*The key variables in the combined_data would be month, year. The key variables in the trashwheel_data would be dumpster, month, year.
 *The total precipitation in 2018 was `r sum(pull(precipitation_data_2018, total))`
 *The median number of sports ball in a dumpster in 2017 was `r trashwheel_data %>% select(sports_balls, year) %>% filter(year == 2017) %>% summarise(median = median(sports_balls))`
 
 # Question 2
 
-##First reading the datasets pols-month.csv and cleaning the data in pols-month.csv. Used separate() to break up the variable mon into integer variables year, month, and day; replaced month number with month name; created a president variable taking values gop and dem, and removed prez_dem and prez_gop; and removed the day variable.
+##First read the datasets pols-month.csv and cleaned the data in pols-month.csv. Used separate() to break up the variable mon into integer variables year, month, and day; replaced month number with month name and converted it to lower case to maintain consistency with rest of the datasets. Year is converted into an integer. Removed the variable day. Created a president variable taking values gop and dem, and removed prez_dem and prez_gop; and removed the day variable.
 
 ```{r pols_data}
 pols_data = read_csv(file = "./data/pols-month.csv") %>%
@@ -70,12 +70,14 @@ pols_data = read_csv(file = "./data/pols-month.csv") %>%
     prez_gop:prez_dem, names_to = "president", names_prefix = "prez_") %>%
   mutate(
    month = as.numeric(month),
-   month = month.abb[month]
+   month = month.abb[month],
+   month = str_to_lower(month),
+   year  = as.integer(year)
   ) %>%
   select(-day)
 ```
 
-##Cleaning the data in snp.csv using a similar process to the above. For consistency across datasets, arranging according to year and month, and organizing so that year and month are the leading columns.
+##Cleaning the data in snp.csv using a similar process to the above. Seperated the variable mon into year,month and day using separate().Replaced month number with month name and converted it to lower case to maintain consistency with rest of the datasets.Year is converted into an integer. Removed the variable day. For consistency across datasets, arranging according to year and month using the arrange() function, and organizing so that year and month are the leading columns using the select() function.
 
 ```{r snp_data}
 
@@ -86,10 +88,12 @@ snp_data = read_csv(file = "./data/snp.csv") %>%
   select(year, month, close) %>%
   mutate(
     month = as.numeric(month),
-    month = month.abb[month]
+    month = month.abb[month],
+    month = str_to_lower(month),
+    year = as.integer(year)
     ) 
 ```
-##Tidying the unemployment data so that it can be merged with the previous datasets
+##Tidying the unemployment data so that it can be merged with the previous datasets. Using pivot_longer to go from the wide to long format.Organizing so that year and month are the leading columns using the select() function. Year is converted into an integer. So, in all the three datasets month is given by name in lower case, year is an integer, day is removed and year,month are the leading columns.  
 
 ```{r unemployment_data}
 
@@ -98,8 +102,8 @@ unemployment_data =
   janitor::clean_names() %>%
   pivot_longer(
     jan:dec, names_to = "month", values_to = "unemployment_rate") %>%
-  mutate(year = as.character(year)) %>%
-  select(year, month, everything())
+  select(year, month, unemployment_rate) %>%
+  mutate(year = as.integer(year))
 ```
 
 ##merged_data is formed by joining snp into pols using year and month as keys. final_merged_data is formed by joining the merged_data with unemployment_data using year and month as keys.
@@ -113,7 +117,7 @@ final_merged_data = left_join(merged_data, unemployment_data, by = c("year","mon
 
 # Question 3
 
-##Loading and tidying the data Popular_Baby_Names and creating a dataset called pop_baby. Changing the case structure of gender, ethnicity and childs first name to lower case to maintain uniformity throughout. Removing all the duplicate rows.
+##Loading and tidying the data Popular_Baby_Names and creating a dataset called pop_baby. Changing the case structure of gender, ethnicity and childs first name to lower case using mutate() function to maintain uniformity throughout. Removing all the duplicate rows using distinct().
 
 ```{r popular baby}
 
@@ -125,27 +129,23 @@ pop_baby = read_csv(file = "./data/Popular_Baby_Names.csv") %>%
     ) %>%
   distinct()
 ```
-##Producing a well-structured, reader-friendly table showing the rank in popularity of the name “Olivia” as a female baby name over time; showing the rows for ethnicities and columns for year. 
+##Producing a well-structured, reader-friendly table using kable() function showing the rank in popularity of the name “Olivia” as a female baby name over time; The table shows ethnicities in the rows and year in the columns. 
 
 ```{r olivia}
 
 olivia = filter(pop_baby, gender == "female", childs_first_name == "olivia") %>%
   select(-gender, -childs_first_name, -count)
-  olivia_new = pivot_wider(
-    olivia, names_from = "year_of_birth", values_from = "rank") 
-  olivia_new[is.na(olivia_new)] <- 0
-kable(olivia_new, format = "html")
+  olivia = pivot_wider(olivia, names_from = "year_of_birth", values_from = "rank") 
+  kable(olivia, format = "html")
 ```
 ##Producing a similar table called pop_boy showing the most popular name among male children over time for male
 
 ```{r pop_boy}
 
 pop_boy = filter(pop_baby, gender == "male", rank == 1) %>%
-  select(-gender,-count, -rank)
+  select(-gender, -count, -rank)
 pop_boy = pivot_wider(pop_boy, names_from = "year_of_birth", values_from = "childs_first_name") 
 kable(pop_boy, format = "html")
-
-  
 ```
 ##Producing a scatter plot showing the number of children with a name (y axis) against the rank in popularity of that name (x axis) for male, white non-hispanic children born in 2016.
 
