@@ -130,7 +130,7 @@ final_merged_data = left_join(merged_data, unemployment_data, by = c("year","mon
 
 * The dataset "unemployment_data" contains the percentage of unemplyment (unemployment rate) for each month from 1948-2015. This dataset contains `r nrow(unemployment_data) ` observations and `r ncol(unemployment_data)` columns.
 
-* Dimension of all the datasets - The number of rows in the final_merged_data is `r nrow(final_merged_data)` and the number of columns are `r ncol(final_merged_data)`. This final_merged_data is formed by joining the merged_data which has `r nrow(merged_data)` rows and `r ncol(merged_data)` columns and the unemployment_data which has `r nrow(unemployment_data)` rows and `r ncol(unemployment_data)` columns. The merged_data was formed by combining pols_data (which has `r nrow(pols_data)` rows and `r ncol(pols_data)` columns) and snp_data which has `r nrow(snp_data)` and `r ncol(snp_data)` columns.
+* The final_merged_data contains `r nrow(final_merged_data)` observations of `r ncol(final_merged_data)` variables. This final_merged_data is formed by joining the merged_data which has `r nrow(merged_data)` rows and `r ncol(merged_data)` columns and the unemployment_data which has `r nrow(unemployment_data)` rows and `r ncol(unemployment_data)` columns. The merged_data was formed by combining pols_data (which has `r nrow(pols_data)` rows and `r ncol(pols_data)` columns) and snp_data which has `r nrow(snp_data)` and `r ncol(snp_data)` columns.
 
 * The key variables are year, month, close, president, value, unemployment rate.
 
