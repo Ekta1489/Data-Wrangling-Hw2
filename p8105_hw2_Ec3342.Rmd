@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(dplyr)
-
+library(knitr)
 ```
 
 # Question 1
@@ -130,24 +130,29 @@ pop_baby = read_csv(file = "./data/Popular_Baby_Names.csv") %>%
 ```{r olivia}
 
 olivia = filter(pop_baby, gender == "female", childs_first_name == "olivia") %>%
-  pivot_wider(names_from = year_of_birth, values_from = rank) %>%
-  select(gender, -childs_first_name, -count)
+  select(-gender, -childs_first_name, -count)
+  olivia_new = pivot_wider(
+    olivia, names_from = "year_of_birth", values_from = "rank") 
+  olivia_new[is.na(olivia_new)] <- 0
+kable(olivia_new, format = "html")
 ```
 ##Producing a similar table called pop_boy showing the most popular name among male children over time for male
 
 ```{r pop_boy}
 
 pop_boy = filter(pop_baby, gender == "male", rank == 1) %>%
-  pivot_wider(names_from = year_of_birth, values_from = rank) %>%
-  select(-gender,-count) %>%
-  select(childs_first_name, everything())
+  select(-gender,-count, -rank)
+pop_boy = pivot_wider(pop_boy, names_from = "year_of_birth", values_from = "childs_first_name") 
+kable(pop_boy, format = "html")
+
+  
 ```
 ##Producing a scatter plot showing the number of children with a name (y axis) against the rank in popularity of that name (x axis) for male, white non-hispanic children born in 2016.
 
 ```{r}
 
 filter(pop_baby, gender == "male", ethnicity == "white non hispanic", year_of_birth == 2016) %>%
-  ggplot(aes(x = rank,y = count)) + geom_point(alpha = 0.4)
+  ggplot(aes(x = rank,y = count)) + geom_point()
 
 ```
 
