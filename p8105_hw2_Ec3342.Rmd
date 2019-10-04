@@ -160,7 +160,7 @@ olivia[olivia == "white non hisp"] <- "white non hispanic"
 olivia = pivot_wider(olivia, names_from = "year_of_birth", values_from = "rank") 
 kable(olivia, format = "html")
 ```
-##Producing a similar table called pop_boy showing the most popular name among male children over time for male
+##Producing a similar table called pop_boy showing the most popular name among male children over time for male.
 
 ```{r pop_boy}
 
